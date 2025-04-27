@@ -1,8 +1,13 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Wallet, AlertCircle } from "lucide-react"
+import { useWallet } from "@/hooks/use-wallet"
 
 export default function ConnectWalletPrompt() {
+  const { connect, isLoading } = useWallet()
+
   return (
     <div className="container mx-auto px-4 py-16 flex items-center justify-center">
       <Card className="max-w-md w-full">
@@ -25,9 +30,13 @@ export default function ConnectWalletPrompt() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full gap-2">
+          <Button 
+            className="w-full gap-2" 
+            onClick={connect}
+            disabled={isLoading}
+          >
             <Wallet className="h-4 w-4" />
-            Connect Wallet
+            {isLoading ? "Connecting..." : "Connect Wallet"}
           </Button>
         </CardFooter>
       </Card>
