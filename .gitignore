@@ -26,4 +26,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+<<<<<<< HEAD
 backend\venv
+=======
+backend/venv
+>>>>>>> 9098e4fce9249c10cf7b47984727d3e783cd14ac
