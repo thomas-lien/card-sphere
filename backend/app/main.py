@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import models
 from app.routes.profile_routes import profile_router
 from app.routes.vendor_routes import vendor_router
@@ -8,6 +9,15 @@ from app.routes.auth_routes import auth_router
 from app.routes.security import security_router
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(profile_router, prefix="/profile", tags=["Profile"])
 app.include_router(vendor_router, prefix="/vendor", tags=["Vendor"])

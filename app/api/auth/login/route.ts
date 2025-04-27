@@ -1,30 +1,29 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server"
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
+    const { username, password } = await request.json()
+
     const response = await fetch("http://localhost:8000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        username: "John Doe",
-        password: "password123"
-      }),
+      body: JSON.stringify({ username, password }),
     })
 
     const data = await response.json()
 
     if (!response.ok) {
       return NextResponse.json(
-        { detail: data.detail || "Failed to fetch users" },
+        { detail: data.detail || "Failed to sign in" },
         { status: response.status }
       )
     }
 
-    return NextResponse.json([data.user])
+    return NextResponse.json(data)
   } catch (error) {
-    console.error("Error fetching users:", error)
+    console.error("Login error:", error)
     return NextResponse.json(
       { detail: "Internal server error" },
       { status: 500 }
