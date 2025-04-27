@@ -92,3 +92,14 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .container-wide {
+    @apply container mx-auto px-4 md:px-6;
+    max-width: 1600px; /* Increased max-width for ultra-wide screens */
+  }
+
+  .section-padding {
+    @apply py-12 md:py-16 lg:py-24;
+  }
+}

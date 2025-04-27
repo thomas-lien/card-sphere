@@ -5,7 +5,7 @@ import { Github, Twitter } from "lucide-react"
 export default function Footer() {
   return (
     <footer className="border-t">
-      <div className="container flex flex-col md:flex-row items-center justify-between py-10 gap-6">
+      <div className="container-wide flex flex-col md:flex-row items-center justify-between py-10 gap-6">
         <div className="flex flex-col items-center md:items-start gap-2">
           <Link href="/" className="font-bold text-xl">
             CardSphere

@@ -40,8 +40,8 @@ export default function FeaturedCards() {
   ]
 
   return (
-    <section className="w-full py-12">
-      <div className="container px-4 md:px-6">
+    <section className="w-full section-padding">
+      <div className="container-wide">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Featured Gift Cards</h2>

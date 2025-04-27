@@ -4,9 +4,9 @@ import { ArrowRight, Gift, ShieldCheck, Zap } from "lucide-react"
 
 export default function HeroSection() {
   return (
-    <div className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48">
-      <div className="container px-4 md:px-6">
-        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
+    <div className="relative w-full section-padding">
+      <div className="container-wide">
+        <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] 2xl:grid-cols-[1fr_700px] max-w-[2000px] mx-auto">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
