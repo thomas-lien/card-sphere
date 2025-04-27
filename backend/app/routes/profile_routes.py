@@ -44,4 +44,21 @@ def deposit(email: str, amount: float):
     raise HTTPException(status_code=404, detail="User not found")
 
 
+@profile_router.post("/deposit")
+def deposit(email: str, amount: float):
+    """User deposits money into their account  
+        works with vendors selling and users buying"""
+    for user in user_name:
+        if user["email"] == email:
+            user["balance"] += amount
+            return JSONResponse(
+                status_code=200,
+                content={
+                    "message": "Deposit successful",
+                    "user": user,
+                },
+            )
+    raise HTTPException(status_code=404, detail="User not found")
+
+
 
