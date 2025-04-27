@@ -1448,3 +1448,81 @@ Would you like me to update your `.gitignore` with these optional additions?
 
 ---
 
+_**User**_
+
+what does this mean
+
+---
+
+_**Assistant**_
+
+Here’s what those two errors mean:
+
+---
+
+### 1. **Updates were rejected because the remote contains work that you do not have locally**
+
+```
+error: failed to push some refs to 'https://github.com/thomas-lien/cardsphere.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+```
+
+**Meaning:**  
+Someone (maybe you, from another computer, or a collaborator) has pushed new commits to the GitHub repository that you don’t have on your local machine.  
+Git is preventing you from overwriting those changes.
+
+**How to fix:**  
+You need to pull the latest changes from GitHub and merge them into your local branch before you can push.
+
+```sh
+git pull origin main
+# (Resolve any merge conflicts if prompted)
+git push origin main
+```
+
+---
+
+### 2. **The current branch has no upstream branch**
+
+```
+fatal: The current branch main has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin main
+```
+
+**Meaning:**  
+Your local branch isn’t linked to a branch on GitHub yet.  
+This usually happens the first time you push a new branch.
+
+**How to fix:**  
+Set the upstream branch with:
+
+```sh
+git push --set-upstream origin main
+```
+
+After this, you can just use `git push` in the future.
+
+---
+
+## **Summary of what to do:**
+
+1. If you see the first error, run:
+   ```sh
+   git pull origin main
+   # (fix any conflicts if needed)
+   git push origin main
+   ```
+2. If you see the second error, run:
+   ```sh
+   git push --set-upstream origin main
+   ```
+
+Let me know if you need help resolving merge conflicts!
+
+---
+
