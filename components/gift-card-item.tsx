@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 interface GiftCardProps {
   card: {
@@ -35,10 +36,14 @@ export default function GiftCardItem({ card }: GiftCardProps) {
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <Button variant="outline" size="sm">
-              Details
-            </Button>
-            <Button size="sm">Buy Now</Button>
+            <Link href={`/marketplace/${card.id}`}>
+              <Button variant="outline" size="sm">
+                Details
+              </Button>
+            </Link>
+            <Link href={`/marketplace/${card.id}/purchase`}>
+              <Button size="sm">Buy Now</Button>
+            </Link>
           </div>
         </div>
       </div>

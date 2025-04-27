@@ -2,6 +2,11 @@
 
 # dependencies
 /node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
 
 # next.js
 /.next/
@@ -9,6 +14,12 @@
 
 # production
 /build
+/dist
+
+# misc
+.DS_Store
+*.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -16,8 +27,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
-.env*
+# local env files
+.env*.local
+.env
+.env.development
+.env.test
+.env.production
 
 # vercel
 .vercel
@@ -26,4 +41,40 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Hardhat
+/cache
+/artifacts
+/typechain
+/typechain-types
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 backend/venv
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Logs
+logs
+*.log
+
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
