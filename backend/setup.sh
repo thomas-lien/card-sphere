@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "source venv/bin/activate"
 # Check if Python 3 is installed
 if ! command -v python3 &> /dev/null; then
     echo "Python 3 is not installed. Please install Python 3 first."
@@ -35,7 +35,5 @@ echo "Verifying installation..."
 python3 -c "import fastapi; import uvicorn; import pydantic; import jose; import passlib; import bcrypt; print('All packages installed successfully!')"
 
 echo "Setup complete! You can now run the backend server with:"
-echo "source venv/bin/activate"
-echo "uvicorn app.main:app --reload"
 
-curl -X POST http://localhost:8000/auth/login -H "Content-Type: application/json" -d '{"username":"John Doe","password":"password123"}' 
+echo "uvicorn app.main:app --reload"
