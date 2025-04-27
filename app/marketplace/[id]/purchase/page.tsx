@@ -13,6 +13,7 @@ import { WalletConnectButton } from "@/components/wallet-connect-button"
 import { useWallet } from "@/hooks/use-wallet"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { use } from "react"
 
 // This would typically come from an API or database
 const giftCards = [
@@ -117,8 +118,9 @@ const giftCards = [
   },
 ]
 
-export default function PurchasePage({ params }: { params: { id: string } }) {
-  const giftCard = giftCards.find((card) => card.id === params.id)
+export default function PurchasePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params)
+  const giftCard = giftCards.find((card) => card.id === resolvedParams.id)
   const { isConnected } = useWallet()
   const [email, setEmail] = useState("")
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -164,7 +166,7 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link href={`/marketplace/${params.id}`} className="inline-flex items-center text-sm mb-6 hover:underline">
+      <Link href={`/marketplace/${resolvedParams.id}`} className="inline-flex items-center text-sm mb-6 hover:underline">
         <ArrowLeft className="mr-2 h-4 w-4" />
         Back to Gift Card Details
       </Link>

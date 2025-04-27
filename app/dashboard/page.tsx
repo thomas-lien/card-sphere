@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserGiftCards from "@/components/user-gift-cards"
@@ -5,11 +7,11 @@ import UserTransactions from "@/components/user-transactions"
 import UserRewards from "@/components/user-rewards"
 import ConnectWalletPrompt from "@/components/connect-wallet-prompt"
 import DashboardStats from "@/components/dashboard-stats"
+import { useWallet } from "@/hooks/use-wallet"
 import type { Metadata } from 'next'
 
 export default function DashboardPage() {
-  // In a real implementation, we would check if the user is connected
-  const isConnected = false
+  const { isConnected } = useWallet()
 
   if (!isConnected) {
     return <ConnectWalletPrompt />

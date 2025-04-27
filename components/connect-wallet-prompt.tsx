@@ -1,8 +1,31 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Wallet, AlertCircle } from "lucide-react"
+import { useWallet } from "@/hooks/use-wallet"
+import { useToast } from "@/hooks/use-toast"
 
 export default function ConnectWalletPrompt() {
+  const { connect, isConnected } = useWallet()
+  const { toast } = useToast()
+
+  const handleConnect = async () => {
+    try {
+      await connect()
+      toast({
+        title: "Wallet Connected",
+        description: "Your wallet has been successfully connected.",
+      })
+    } catch (error) {
+      toast({
+        title: "Connection Failed",
+        description: "Failed to connect your wallet. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-16 flex items-center justify-center">
       <Card className="max-w-md w-full">
@@ -25,9 +48,13 @@ export default function ConnectWalletPrompt() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full gap-2">
+          <Button 
+            className="w-full gap-2" 
+            onClick={handleConnect}
+            disabled={isConnected}
+          >
             <Wallet className="h-4 w-4" />
-            Connect Wallet
+            {isConnected ? "Connected" : "Connect Wallet"}
           </Button>
         </CardFooter>
       </Card>
