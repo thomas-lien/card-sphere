@@ -2,7 +2,7 @@
 
 echo "🚀 Setting up CardSphere development environment..."
 
-# Clean existing node_modules and package-lock.json to prevent conflicts
+# Clean existing dependencies
 echo "🧹 Cleaning existing dependencies..."
 if [ -d "node_modules" ]; then
     rm -rf node_modules
@@ -13,13 +13,17 @@ if [ -f "package-lock.json" ]; then
     echo "Removed package-lock.json"
 fi
 
+# Install specific React version and dependencies
+echo "📦 Installing React and core dependencies..."
+npm install react@18.2.0 react-dom@18.2.0 --legacy-peer-deps
+
 # Install base dependencies
 echo "📦 Installing base dependencies..."
-npm install
+npm install --legacy-peer-deps
 
-# Install specific versions of Web3 dependencies
-echo "🌐 Installing Web3 dependencies..."
-npm install wagmi@1.4.13 viem@1.21.4 @tanstack/react-query@4.36.1 --legacy-peer-deps
+# Install Web3 and additional required dependencies
+echo "🌐 Installing Web3 and additional dependencies..."
+npm install wagmi@1.4.13 viem@1.21.4 @tanstack/react-query@4.36.1 pino-pretty --legacy-peer-deps
 
 # Check if .env.local exists
 if [ ! -f .env.local ]; then
