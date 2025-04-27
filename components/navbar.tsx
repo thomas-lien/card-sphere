@@ -15,16 +15,12 @@ import {
 import { cn } from "@/lib/utils"
 import { Menu, Wallet } from "lucide-react"
 import { ModeToggle } from "./mode-toggle"
+import { useWallet } from "@/hooks/use-wallet"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
-  const [isConnected, setIsConnected] = useState(false)
-
-  const handleConnect = () => {
-    // In a real implementation, this would connect to MetaMask or another wallet
-    setIsConnected(true)
-  }
+  const { address, isConnected, connect, disconnect, isLoading } = useWallet()
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -32,6 +28,10 @@ export default function Navbar() {
     { name: "Dashboard", path: "/dashboard" },
     { name: "About", path: "/about" },
   ]
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -86,14 +86,14 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <ModeToggle />
           {isConnected ? (
-            <Button variant="outline" className="gap-2">
+            <Button variant="outline" className="gap-2" onClick={disconnect} disabled={isLoading}>
               <Wallet className="h-4 w-4" />
-              <span className="hidden sm:inline">0x1a2...3b4c</span>
+              <span className="hidden sm:inline">{address ? formatAddress(address) : "Connected"}</span>
             </Button>
           ) : (
-            <Button onClick={handleConnect} className="gap-2">
+            <Button onClick={connect} className="gap-2" disabled={isLoading}>
               <Wallet className="h-4 w-4" />
-              <span>Connect Wallet</span>
+              <span>{isLoading ? "Connecting..." : "Connect Wallet"}</span>
             </Button>
           )}
         </div>
