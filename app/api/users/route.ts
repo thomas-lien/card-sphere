@@ -2,14 +2,15 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
+    // Get the current user from the request
     const response = await fetch("http://localhost:8000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: "John Doe",
-        password: "password123"
+        username: "Jane Smith",
+        password: "password456"
       }),
     })
 

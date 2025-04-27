@@ -7,44 +7,42 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Wallet, Gift, CreditCard, BarChart3, Settings, LogOut, User } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { fetchUserData, fetchGiftCards, fetchAllUsers, type UserData, type GiftCardData } from "@/lib/user"
+import { useRouter } from "next/navigation"
+
+interface UserData {
+  id: number
+  name: string
+  email: string
+  isVendor: boolean
+  giftCardOwned: string[]
+  history: any[]
+  user_balance: number
+}
 
 export default function AccountPage() {
+  const router = useRouter()
   const [userData, setUserData] = useState<UserData | null>(null)
-  const [giftCards, setGiftCards] = useState<GiftCardData[]>([])
-  const [allUsers, setAllUsers] = useState<UserData[]>([])
   const [loading, setLoading] = useState(true)
-  const [selectedUserId, setSelectedUserId] = useState<number>(1)
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true)
+    const fetchUserData = async () => {
       try {
-        const [user, cards, users] = await Promise.all([
-          fetchUserData(selectedUserId),
-          fetchGiftCards([]), // We'll update this after getting user data
-          fetchAllUsers()
-        ])
-        setUserData(user)
-        setAllUsers(users)
-        if (user) {
-          const userCards = await fetchGiftCards(user.giftCardOwned)
-          setGiftCards(userCards)
+        // Get user data from localStorage
+        const storedUser = localStorage.getItem("user")
+        if (!storedUser) {
+          router.push("/signin")
+          return
         }
+        setUserData(JSON.parse(storedUser))
       } catch (error) {
-        console.error("Error loading data:", error)
+        console.error("Error fetching user data:", error)
       } finally {
         setLoading(false)
       }
     }
 
-    loadData()
-  }, [selectedUserId])
-
-  const handleUserChange = (value: string) => {
-    setSelectedUserId(parseInt(value))
-  }
+    fetchUserData()
+  }, [router])
 
   if (loading) {
     return (
@@ -65,6 +63,24 @@ export default function AccountPage() {
       </div>
     )
   }
+
+  // Placeholder data for gift cards - in a real app, this would come from the backend
+  const giftCards = [
+    {
+      id: "ABC123",
+      name: "Starbucks",
+      balance: 25.0,
+      expiryDate: "12/31/2025",
+      color: "bg-green-500",
+    },
+    {
+      id: "XYZ456",
+      name: "Amazon",
+      balance: 50.0,
+      expiryDate: "06/30/2026",
+      color: "bg-blue-500",
+    },
+  ]
 
   // Placeholder data for transactions - in a real app, this would come from the backend
   const transactions = [
@@ -94,22 +110,6 @@ export default function AccountPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-6">
-        {/* User Selector */}
-        <div className="flex justify-end">
-          <Select value={selectedUserId.toString()} onValueChange={handleUserChange}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select user" />
-            </SelectTrigger>
-            <SelectContent>
-              {allUsers.map((user) => (
-                <SelectItem key={user.id} value={user.id.toString()}>
-                  {user.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
         {/* Profile Header */}
         <div className="flex items-center gap-6">
           <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center">
