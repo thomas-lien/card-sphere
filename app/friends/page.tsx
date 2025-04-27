@@ -13,7 +13,7 @@ type Friend = {
 
 type FriendRequest = {
   id: number;
-  sender: { name?: string; email: string };
+  sender: { id: number; name?: string; email: string };
   created_at: string;
 };
 
@@ -35,8 +35,9 @@ export default function FriendsPage() {
   const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
   const [giftCards, setGiftCards] = useState<any[]>([]);
   const [selectedCard, setSelectedCard] = useState<string>("");
+  const [successMsg, setSuccessMsg] = useState("");
 
-  // Fetch friends, requests, and possible friends
+  // Fetch all data
   const fetchData = async () => {
     setLoading(true);
     setError("");
@@ -70,7 +71,6 @@ export default function FriendsPage() {
       await fetch(`${API_BASE}/accept-request/${requestId}?user_id=${CURRENT_USER_ID}`, {
         method: "POST",
       });
-      // Move the accepted user from requests to friends
       const acceptedRequest = requests.find((r) => r.id === requestId);
       if (acceptedRequest) {
         setFriends((prev) => [
@@ -84,6 +84,8 @@ export default function FriendsPage() {
         ]);
         setRequests((prev) => prev.filter((r) => r.id !== requestId));
         setPossibleFriends((prev) => prev.filter((u) => u.id !== acceptedRequest.sender.id));
+        setSuccessMsg("Friend request accepted!");
+        setTimeout(() => setSuccessMsg(""), 2000);
       }
     } catch (e) {
       setError("Failed to accept request.");
@@ -176,7 +178,7 @@ export default function FriendsPage() {
                   <div style={{ fontSize: 48, marginBottom: 8 }}>{friend.name?.charAt(0) || friend.email.charAt(0)}</div>
                   <div style={{ fontWeight: 700, fontSize: 20 }}>{friend.name || friend.email}</div>
                   <div style={{ color: "#555", fontSize: 14 }}>Friends since {new Date(friend.created_at).toLocaleDateString()}</div>
-                  <button onClick={() => handleOpenGiftDialog(friend)}>Send Gift</button>
+                  <button onClick={() => handleOpenGiftDialog(friend)} style={{ marginTop: 12, background: "#1976d2", color: "white", border: "none", borderRadius: 8, padding: "8px 18px", fontWeight: 700, cursor: "pointer" }}>Send Gift</button>
                 </div>
               ))
             )}
@@ -300,6 +302,7 @@ export default function FriendsPage() {
           </div>
         </div>
       )}
+      {successMsg && <div style={{ color: "green", marginBottom: 16 }}>{successMsg}</div>}
     </div>
   );
 } 

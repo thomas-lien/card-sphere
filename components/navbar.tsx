@@ -58,6 +58,7 @@ export default function Navbar() {
     { name: "Home", path: "/" },
     { name: "Marketplace", path: "/marketplace" },
     { name: "Dashboard", path: "/dashboard" },
+    { name: "Friends", path: "/friends" },
     { name: "About", path: "/about" },
   ]
 

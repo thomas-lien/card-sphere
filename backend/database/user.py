@@ -33,6 +33,7 @@ user_name = [
         "giftCardOwned": [
             "LMN789",
             "DEF012",
+            "ABC123",
         ],
         "history": [],
         "user_balance": 0.0,

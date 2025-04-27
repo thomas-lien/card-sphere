@@ -7,6 +7,7 @@ from app.routes.campaign_routes import campaign_router
 from app.routes.giftcard_routes import giftcard_router
 from app.routes.auth_routes import auth_router
 from app.routes.security import security_router
+from app.routes.friend_routes import router as friend_router
 
 app = FastAPI()
 
@@ -25,6 +26,7 @@ app.include_router(campaign_router, prefix="/campaign", tags=["Campaign"])
 app.include_router(giftcard_router, prefix="/giftcard", tags=["GiftCard"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(security_router, prefix="/security", tags=["Security"])
+app.include_router(friend_router, prefix="/api/friends", tags=["Friends"])
 
 
 @app.get("/")

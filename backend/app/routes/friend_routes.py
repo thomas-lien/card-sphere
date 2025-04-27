@@ -1,10 +1,47 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from typing import List
 from datetime import datetime
 from database.friends import friend_requests, friendships
 from database.user import user_name
 
 router = APIRouter()
+
+# Add some mock users
+user_name = [
+    {"id": 1, "name": "John Doe", "email": "JohnDoe@gmail.com"},
+    {"id": 2, "name": "Jane Smith", "email": "Jane@gmail.com"},
+    {"id": 3, "name": "Alice Johnson", "email": "Alice@gmail.com"},
+    {"id": 4, "name": "Bob Brown", "email": "Bob@gmail.com"},
+    {"id": 5, "name": "Charlie Davis", "email": "Charlie@gmail.com"},
+    {"id": 6, "name": "Eve Adams", "email": "Eve@gmail.com"},
+]
+
+# Mock friend requests (id, sender_id, receiver_id, status, created_at)
+friend_requests = [
+    {"id": 1, "sender_id": 2, "receiver_id": 1, "status": "pending", "created_at": "2024-04-22T09:00:00"},  # Jane -> John
+    {"id": 2, "sender_id": 1, "receiver_id": 3, "status": "pending", "created_at": "2024-04-23T09:00:00"},  # John -> Alice
+    {"id": 3, "sender_id": 4, "receiver_id": 1, "status": "pending", "created_at": "2024-04-24T09:00:00"},  # Bob -> John
+    {"id": 4, "sender_id": 5, "receiver_id": 6, "status": "pending", "created_at": "2024-04-25T09:00:00"},  # Charlie -> Eve
+]
+
+# Mock friendships (id, user_id, friend_id, created_at)
+friendships = [
+    {"id": 1, "user_id": 1, "friend_id": 2, "created_at": "2024-04-20T09:00:00"},  # John & Jane
+    {"id": 2, "user_id": 1, "friend_id": 4, "created_at": "2024-04-21T09:00:00"},  # John & Bob
+    {"id": 3, "user_id": 3, "friend_id": 6, "created_at": "2024-04-22T09:00:00"},  # Alice & Eve
+]
+
+# Mock gift cards (simulate a simple in-memory store)
+gift_cards = [
+    {"card_code": "GC1", "owner_email": "JohnDoe@gmail.com", "store_location": "Amazon", "balance": 50, "expiry_date": "2024-12-31"},
+    {"card_code": "GC4", "owner_email": "JohnDoe@gmail.com", "store_location": "Starbucks", "balance": 15, "expiry_date": "2024-09-30"},
+    {"card_code": "GC2", "owner_email": "Jane@gmail.com", "store_location": "Target", "balance": 30, "expiry_date": "2024-11-30"},
+    {"card_code": "GC5", "owner_email": "Jane@gmail.com", "store_location": "Best Buy", "balance": 25, "expiry_date": "2024-08-31"},
+    {"card_code": "GC3", "owner_email": "Bob@gmail.com", "store_location": "Walmart", "balance": 20, "expiry_date": "2024-10-31"},
+    {"card_code": "GC6", "owner_email": "Alice@gmail.com", "store_location": "Apple", "balance": 100, "expiry_date": "2024-12-01"},
+    {"card_code": "GC7", "owner_email": "Charlie@gmail.com", "store_location": "Nike", "balance": 40, "expiry_date": "2024-09-15"},
+    {"card_code": "GC8", "owner_email": "Eve@gmail.com", "store_location": "Sephora", "balance": 60, "expiry_date": "2024-11-20"},
+]
 
 @router.post("/send-request/{receiver_id}")
 async def send_friend_request(receiver_id: int, sender_id: int):
@@ -129,26 +166,11 @@ async def get_friend_requests(user_id: int):
 
 @router.get("/friends/{user_id}")
 async def get_friends(user_id: int):
-    # Get all friendships for the user
-    user_friendships = [
-        friendship for friendship in friendships
-        if friendship["user_id"] == user_id or friendship["friend_id"] == user_id
+    # Return a mock list for demo
+    return [
+        {"id": 2, "name": "Jane Smith", "email": "Jane@gmail.com", "created_at": "2024-04-20T09:00:00"},
+        {"id": 3, "name": "Alice Johnson", "email": "Alice@gmail.com", "created_at": "2024-04-21T09:00:00"},
     ]
-    
-    # Add friend information to each friendship
-    friends_list = []
-    for friendship in user_friendships:
-        friend_id = friendship["friend_id"] if friendship["user_id"] == user_id else friendship["user_id"]
-        friend = next((user for user in user_name if user["id"] == friend_id), None)
-        if friend:
-            friends_list.append({
-                "id": friend["id"],
-                "email": friend["email"],
-                "name": friend.get("name", ""),
-                "created_at": friendship["created_at"]
-            })
-    
-    return friends_list
 
 @router.get("/possible-friends/{user_id}")
 async def get_possible_friends(user_id: int):
@@ -166,3 +188,19 @@ async def get_possible_friends(user_id: int):
         if user["id"] != user_id and user["id"] not in friend_ids
     ]
     return possible 
+
+@router.get("/giftcards")
+async def get_gift_cards(email: str):
+    # Return all gift cards owned by the user
+    cards = [c for c in gift_cards if c["owner_email"].lower() == email.lower()]
+    return {"gift_cards": cards}
+
+@router.post("/{card_code}/transfer")
+async def transfer_gift_card(card_code: str, email_sender: str, recipient_email: str, request: Request):
+    # Find the card
+    card = next((c for c in gift_cards if c["card_code"] == card_code and c["owner_email"].lower() == email_sender.lower()), None)
+    if not card:
+        raise HTTPException(status_code=404, detail="Gift card not found or not owned by sender")
+    # Transfer ownership
+    card["owner_email"] = recipient_email
+    return {"message": f"Gift card {card_code} sent from {email_sender} to {recipient_email}"}
