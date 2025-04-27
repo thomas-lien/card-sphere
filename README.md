@@ -10,7 +10,9 @@ A decentralized marketplace for NFT-based gift cards and vouchers, leveraging We
    cd card-sphere
    ```
 
-2. **Automated Setup (Recommended)**
+2. **Run Setup Script**
+
+   **For Mac/Linux (Bash):**
    ```bash
    # Make the setup script executable
    chmod +x setup.sh
@@ -18,7 +20,26 @@ A decentralized marketplace for NFT-based gift cards and vouchers, leveraging We
    # Run the setup script
    ./setup.sh
    ```
+
+   **For Windows (PowerShell):**
+   ```powershell
+   # Run the setup script
+   sh setup.sh
+   # OR if sh is not recognized:
+   bash setup.sh
+   ```
+   
+   If you encounter permission issues in PowerShell, try:
+   ```powershell
+   # Option 1: Run with bypass execution policy
+   powershell -ExecutionPolicy Bypass -File setup.sh
+   
+   # Option 2: Use Git Bash if installed
+   "C:\Program Files\Git\bin\bash.exe" setup.sh
+   ```
+
    This script will:
+   - Clean existing dependencies
    - Install all dependencies with correct versions
    - Set up Web3 dependencies (wagmi, viem, etc.)
    - Create your .env.local file if it doesn't exist
