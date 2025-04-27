@@ -33,7 +33,7 @@ def deposit(email: str, amount: float):
         works with vendors selling and users buying"""
     for user in user_name:
         if user["email"] == email:
-            user["balance"] += amount
+            user["user_balance"] += amount
             return JSONResponse(
                 status_code=200,
                 content={

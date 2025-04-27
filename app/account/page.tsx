@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Wallet, Gift, CreditCard, BarChart3, Settings, LogOut, User } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { DepositCalculator } from "@/components/deposit-calculator"
 
 interface UserData {
   id: number
@@ -23,6 +24,7 @@ export default function AccountPage() {
   const router = useRouter()
   const [userData, setUserData] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isDepositOpen, setIsDepositOpen] = useState(false)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -107,6 +109,30 @@ export default function AccountPage() {
   const nextTier = 2500
   const progress = (loyaltyPoints / nextTier) * 100
 
+  const handleDeposit = async (amount: number) => {
+    try {
+      const response = await fetch("/api/users/deposit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userData?.email,
+          amount,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to deposit")
+      }
+
+      const updatedUser = await response.json()
+      setUserData(updatedUser)
+    } catch (error) {
+      console.error("Error depositing:", error)
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-6">
@@ -129,7 +155,14 @@ export default function AccountPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Balance</CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsDepositOpen(true)}
+                className="h-4 w-4 text-muted-foreground hover:text-primary"
+              >
+                <CreditCard className="h-4 w-4" />
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">${userData.user_balance.toFixed(2)}</div>
@@ -314,6 +347,13 @@ export default function AccountPage() {
           </TabsContent>
         </Tabs>
       </div>
+
+      <DepositCalculator
+        isOpen={isDepositOpen}
+        onClose={() => setIsDepositOpen(false)}
+        onDeposit={handleDeposit}
+        currentBalance={userData.user_balance}
+      />
     </div>
   )
 } 
