@@ -23,22 +23,21 @@ A decentralized marketplace for NFT-based gift cards and vouchers, leveraging We
 
    **For Windows (PowerShell):**
    ```powershell
-   # Run the setup script
-   sh setup.sh
-   # OR if sh is not recognized:
-   bash setup.sh
+   # Run the PowerShell setup script
+   .\setup.ps1
    ```
    
-   If you encounter permission issues in PowerShell, try:
+   If you encounter execution policy restrictions in PowerShell, try:
    ```powershell
-   # Option 1: Run with bypass execution policy
-   powershell -ExecutionPolicy Bypass -File setup.sh
+   # Option 1: Run with bypass execution policy for this script only
+   PowerShell -ExecutionPolicy Bypass -File setup.ps1
    
-   # Option 2: Use Git Bash if installed
-   "C:\Program Files\Git\bin\bash.exe" setup.sh
+   # Option 2: Set execution policy for current user (more permissive)
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+   .\setup.ps1
    ```
 
-   This script will:
+   The setup script will:
    - Clean existing dependencies
    - Install all dependencies with correct versions
    - Set up Web3 dependencies (wagmi, viem, etc.)
